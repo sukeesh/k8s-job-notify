@@ -4,7 +4,6 @@ go 1.12
 
 require (
 	cloud.google.com/go v0.38.0 // indirect
-	github.com/davecgh/go-spew v1.1.1
 	github.com/gophercloud/gophercloud v0.1.0 // indirect
 	github.com/imdario/mergo v0.3.8 // indirect
 	golang.org/x/crypto v0.0.0-20190820162420-60c769a6c586 // indirect

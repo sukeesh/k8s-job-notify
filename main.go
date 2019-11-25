@@ -4,6 +4,8 @@ import (
 	"flag"
 	"time"
 
+	"k8s.io/client-go/rest"
+
 	"github.com/sukeesh/cron-k8s-watch/env"
 	"github.com/sukeesh/cron-k8s-watch/message"
 	"github.com/sukeesh/cron-k8s-watch/slack"
@@ -16,11 +18,21 @@ import (
 
 func main() {
 	var kubeconfig *string
-	kubeconfig = flag.String("kubeconfig", "/Users/sukeesh/.kube/config", "absolute path to file")
-	flag.Parse()
-	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
-	if err != nil {
-		panic(err.Error())
+	var config *rest.Config
+	var err error
+
+	if env.IsInCluster() {
+		config, err = rest.InClusterConfig()
+		if err != nil {
+			panic(err.Error())
+		}
+	} else {
+		kubeconfig = flag.String("kubeconfig", "/Users/sukeesh/.kube/config", "absolute path to file")
+		flag.Parse()
+		config, err = clientcmd.BuildConfigFromFlags("", *kubeconfig)
+		if err != nil {
+			panic(err.Error())
+		}
 	}
 
 	clientSet, err := kubernetes.NewForConfig(config)
@@ -35,7 +47,7 @@ func main() {
 			panic(err.Error())
 		}
 		for _, job := range jobs.Items {
-			if job.Status.StartTime.Time.Add(time.Hour * 12).After(time.Now()) {
+			if job.Status.StartTime.Time.Add(time.Hour * 20).After(time.Now()) {
 				if job.Status.Succeeded > 0 {
 					err = slack.SendSlackMessage(message.JobSuccess(job.Name, job.Status.CompletionTime.String()))
 					if err != nil {
