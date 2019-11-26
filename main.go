@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"os"
 	"os/user"
 	"time"
 
@@ -15,6 +16,10 @@ import (
 	"k8s.io/client-go/kubernetes"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 	"k8s.io/client-go/tools/clientcmd"
+)
+
+var (
+	pastJobs map[string]bool
 )
 
 func main() {
@@ -46,27 +51,30 @@ func main() {
 		panic(err.Error())
 	}
 
+	namespace := env.GetNamespace()
 	for {
-		namespace := env.GetNamespace()
 		jobs, err := clientSet.BatchV1().Jobs(namespace).List(metav1.ListOptions{})
 		if err != nil {
 			panic(err.Error())
 		}
 		for _, job := range jobs.Items {
-			if job.Status.StartTime.Time.Add(time.Hour * 20).After(time.Now()) {
+			if pastJobs[job.Name] == false && job.Status.StartTime.Time.Add(time.Minute*20).After(time.Now()) {
 				if job.Status.Succeeded > 0 {
 					err = slack.SendSlackMessage(message.JobSuccess(job.Name, job.Status.CompletionTime.String()))
 					if err != nil {
 						panic(err.Error())
 					}
+					pastJobs[job.Name] = true
 				} else if job.Status.Failed > 0 {
 					err = slack.SendSlackMessage(message.JobFailure(job.Name))
 					if err != nil {
 						panic(err.Error())
 					}
+					pastJobs[job.Name] = true
 				}
 			}
 		}
-		break
+		time.Sleep(time.Minute * 10)
 	}
+	os.Exit(0)
 }
