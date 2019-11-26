@@ -1,4 +1,4 @@
-module github.com/sukeesh/cron-k8s-watch
+module github.com/sukeesh/k8s-job-notify
 
 go 1.12
 

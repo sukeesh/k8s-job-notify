@@ -4,11 +4,11 @@ import (
 	"flag"
 	"time"
 
-	"k8s.io/client-go/rest"
+	"github.com/sukeesh/k8s-job-notify/env"
+	"github.com/sukeesh/k8s-job-notify/message"
+	"github.com/sukeesh/k8s-job-notify/slack"
 
-	"github.com/sukeesh/cron-k8s-watch/env"
-	"github.com/sukeesh/cron-k8s-watch/message"
-	"github.com/sukeesh/cron-k8s-watch/slack"
+	"k8s.io/client-go/rest"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"

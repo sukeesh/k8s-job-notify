@@ -18,3 +18,8 @@ func GetSlackWebHookURL() (webhook string, err error) {
 	}
 	return webhook, nil
 }
+
+func IsInCluster() bool {
+	inCluster := os.Getenv("incluster")
+	return inCluster == "1"
+}
