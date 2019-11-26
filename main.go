@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"os/user"
 	"time"
 
 	"github.com/sukeesh/k8s-job-notify/env"
@@ -27,7 +28,12 @@ func main() {
 			panic(err.Error())
 		}
 	} else {
-		kubeconfig = flag.String("kubeconfig", "/Users/sukeesh/.kube/config", "absolute path to file")
+		usr, err := user.Current()
+		if err != nil {
+			panic(err.Error())
+		}
+		filePath := usr.HomeDir + "/.kube/config"
+		kubeconfig = flag.String("kubeconfig", filePath, "absolute path to file")
 		flag.Parse()
 		config, err = clientcmd.BuildConfigFromFlags("", *kubeconfig)
 		if err != nil {
