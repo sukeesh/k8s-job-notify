@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"log"
 	"os"
 	"os/user"
 	"time"
@@ -29,6 +30,7 @@ func main() {
 		if err != nil {
 			panic(err.Error())
 		}
+		log.Printf("using inClusterConfig")
 	} else {
 		usr, err := user.Current()
 		if err != nil {
@@ -49,12 +51,14 @@ func main() {
 	}
 
 	namespace := env.GetNamespace()
+	log.Printf("fetching jobs from %s namespace", namespace)
 	for {
 		jobs, err := clientSet.BatchV1().Jobs(namespace).List(metav1.ListOptions{})
 		if err != nil {
 			panic(err.Error())
 		}
 		for _, job := range jobs.Items {
+			log.Printf("Found %s", job.Name)
 			if pastJobs[job.Name] == false && job.Status.StartTime.Time.Add(time.Minute*5).After(time.Now()) {
 				if job.Status.Succeeded > 0 {
 					timeSinceCompletion := time.Now().Sub(job.Status.CompletionTime.Time).Minutes()
@@ -73,6 +77,7 @@ func main() {
 			}
 		}
 		time.Sleep(time.Minute * 1)
+		log.Printf("End of 1 minute wait")
 	}
 	os.Exit(0)
 }
