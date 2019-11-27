@@ -1,7 +1,11 @@
 package message
 
-func JobSuccess(jobName string, completedTime string) string {
-	return "*" + jobName + "* succeeded at " + completedTime + " :tada:"
+import (
+	"fmt"
+)
+
+func JobSuccess(jobName string, timeSinceCompletion float64) string {
+	return "*" + jobName + "* succeeded " + fmt.Sprintf("%f", timeSinceCompletion) + " minutes ago :tada:"
 }
 
 func JobFailure(jobName string) string {

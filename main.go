@@ -27,6 +27,7 @@ func main() {
 	var config *rest.Config
 	var err error
 
+	pastJobs := make(map[string]bool)
 	if env.IsInCluster() {
 		config, err = rest.InClusterConfig()
 		if err != nil {
@@ -58,9 +59,10 @@ func main() {
 			panic(err.Error())
 		}
 		for _, job := range jobs.Items {
-			if pastJobs[job.Name] == false && job.Status.StartTime.Time.Add(time.Minute*20).After(time.Now()) {
+			if pastJobs[job.Name] == false && job.Status.StartTime.Time.Add(time.Minute*10).After(time.Now()) {
 				if job.Status.Succeeded > 0 {
-					err = slack.SendSlackMessage(message.JobSuccess(job.Name, job.Status.CompletionTime.String()))
+					timeSinceCompletion := time.Now().Sub(job.Status.CompletionTime.Time).Minutes()
+					err = slack.SendSlackMessage(message.JobSuccess(job.Name, timeSinceCompletion))
 					if err != nil {
 						panic(err.Error())
 					}
@@ -74,7 +76,7 @@ func main() {
 				}
 			}
 		}
-		time.Sleep(time.Minute * 10)
+		time.Sleep(time.Minute * 5)
 	}
 	os.Exit(0)
 }
