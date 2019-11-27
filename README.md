@@ -1,14 +1,29 @@
-# Kubernetes Job/CronJob Notifier
+# Kubernetes Job/CronJob Notifier 
 
-Sends an alert when a Job/CronJob succeeds/fails to Slack. This runs every 10 minutes to check for any success/failures of Kubernetes Jobs/CronJobs.
+This tool sends an alert to slack whenever there is a [Kubernetes](https://github.com/kubernetes/kubernetes) cronJob/Job failure/success.
 
-Docker images are hosted at [hub.docker.com/r/sukeesh/k8s-job-notify](https://hub.docker.com/r/sukeesh/k8s-job-notify)
+**No extra setup** required to deploy this tool on to your cluster, just apply below K8s deploy manifest 🎉  
 
-Docker pull command 
+This uses `InClusterConfig` for accessing Kubernetes API.
+
+Limitations
+-----
+- Namespace scoped i.e., each namespace should have this deploy *separately*
+- **All the jobs** in the namespace are fetched and verified for failures
+  - Will add support for selectors in future 📋 
+   
+Development
+----
+If you wish to run this locally, clone this repository, set `webhook` and `namespace` env variables  
 ```$xslt
-$ docker pull sukeesh/k8s-job-notify
+$ export webhook="slack_webhook_url" && export namespace="<namespace_name>" && go build &&  ./k8s-job-notify
 ```
-Usage
+
+Docker 🐳
+--- 
+Docker images are hosted at [hub.docker/k8s-job-notify](https://hub.docker.com/r/sukeesh/k8s-job-notify)
+
+To start using this
 ---
 
 Create and apply below kubernetes deployment in your cluster
@@ -36,7 +51,7 @@ spec:
       containers:
       - env:
         - name: webhook
-          value: <slack_webhook_url>
+          value: <slack_webhook_url> # creating a secret for this var is recommended
         - name: namespace
           valueFrom:
             fieldRef:
@@ -53,9 +68,5 @@ spec:
             cpu: 500m
             memory: 128Mi
 ```
- 
- TODO
- ---
- - Add support for labels
- - Create a CRD
+
  
