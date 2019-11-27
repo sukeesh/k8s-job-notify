@@ -23,7 +23,8 @@ Limitations
    
 Development
 ----
-If you wish to run this locally, clone this repository, set `webhook` and `namespace` env variables  
+If you wish to run this locally, clone this repository, set `webhook` and `namespace` env variables.
+This expects kube config to be in `~/.kube/config` (default)
 ```$xslt
 $ export webhook="slack_webhook_url" && export namespace="<namespace_name>" && go build &&  ./k8s-job-notify
 ```
@@ -31,6 +32,11 @@ $ export webhook="slack_webhook_url" && export namespace="<namespace_name>" && g
 Docker 🐳
 --- 
 Docker images are hosted at [hub.docker/k8s-job-notify](https://hub.docker.com/r/sukeesh/k8s-job-notify)
+
+Releases
+--
+- If you want to use stable releases, please use [github release tags](https://github.com/sukeesh/k8s-job-notify/releases). For example, `image: sukeesh/k8s-job-notify:1.0`
+- If you wish to use unstable, use `image: sukeesh/k8s-job-notify:beta` (triggered whenever push to `master` is made)
 
 To start using this
 ---
@@ -67,7 +73,7 @@ spec:
                 fieldPath: metadata.namespace
         - name: incluster
           value: "1"
-        image: sukeesh/k8s-job-notify:latest
+        image: sukeesh/k8s-job-notify:<tag>
         name: k8s-job-notify
         resources:
           limits:
