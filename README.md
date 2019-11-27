@@ -1,5 +1,14 @@
 # Kubernetes Job/CronJob Notifier 
 
+![GitHub followers](https://img.shields.io/github/followers/sukeesh?label=Follow&style=social)
+![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fsukeesh%2Fk8s-job-notify)
+
+
+[![GoReport](https://goreportcard.com/badge/github.com/sukeesh/k8s-job-notify)](https://goreportcard.com/badge/github.com/sukeesh/k8s-job-notify)
+[![Docker Pulls](https://img.shields.io/docker/pulls/sukeesh/k8s-job-notify.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/sukeesh/k8s-job-notify/tags)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/sukeesh/k8s-job-notify?color=red&logo=github&style=flat-square)
+
+
 This tool sends an alert to slack whenever there is a [Kubernetes](https://github.com/kubernetes/kubernetes) cronJob/Job failure/success.
 
 **No extra setup** required to deploy this tool on to your cluster, just apply below K8s deploy manifest 🎉  
