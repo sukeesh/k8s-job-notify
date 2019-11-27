@@ -1,10 +1,10 @@
 # Kubernetes Job/CronJob Notifier 
 
-![GitHub followers](https://img.shields.io/github/followers/sukeesh?label=Follow&style=social)
-![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fsukeesh%2Fk8s-job-notify)
+[![GitHub followers](https://img.shields.io/github/followers/sukeesh?label=Follow&style=social)](https://github.com/sukeesh)
+[![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fsukeesh%2Fk8s-job-notify)](https://twitter.com/intent/tweet?url=https%3A%2F%2Fgithub.com%2Fsukeesh%2Fk8s-job-notify)
 
 
-[![GoReport](https://goreportcard.com/badge/github.com/sukeesh/k8s-job-notify)](https://goreportcard.com/badge/github.com/sukeesh/k8s-job-notify)
+[![GoReport](https://goreportcard.com/badge/github.com/sukeesh/k8s-job-notify)](https://goreportcard.com/report/github.com/sukeesh/k8s-job-notify)
 [![Docker Pulls](https://img.shields.io/docker/pulls/sukeesh/k8s-job-notify.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/sukeesh/k8s-job-notify/tags)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/sukeesh/k8s-job-notify?color=red&logo=github&style=flat-square)
 
@@ -84,4 +84,19 @@ spec:
             memory: 128Mi
 ```
 
- 
+Contributing 🤝
+---
+Contributions, issues and feature requests are welcome.
+
+Author
+---
+👤 Sukeesh
+- Twitter: [@sukeeshbabu](https://twitter.com/sukeeshbabu)
+
+Please feel free to ⭐️ this repository if this project helped you! 😉
+
+📝 License
+---
+Copyright © 2019 Sukeesh.<br>
+This project is MIT licensed.
+
