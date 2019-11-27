@@ -58,8 +58,7 @@ func main() {
 			panic(err.Error())
 		}
 		for _, job := range jobs.Items {
-			log.Printf("Found %s", job.Name)
-			if pastJobs[job.Name] == false && job.Status.StartTime.Time.Add(time.Minute*5).After(time.Now()) {
+			if pastJobs[job.Name] == false && job.Status.StartTime.Time.Add(time.Minute*20).After(time.Now()) {
 				if job.Status.Succeeded > 0 {
 					timeSinceCompletion := time.Now().Sub(job.Status.CompletionTime.Time).Minutes()
 					err = slack.SendSlackMessage(message.JobSuccess(job.Name, timeSinceCompletion))
@@ -77,7 +76,7 @@ func main() {
 			}
 		}
 		time.Sleep(time.Minute * 1)
-		log.Printf("End of 1 minute wait")
+		log.Printf("end of 1 minute wait.. fetching new jobs")
 	}
 	os.Exit(0)
 }
