@@ -18,10 +18,6 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
-var (
-	pastJobs map[string]bool
-)
-
 func main() {
 	var kubeconfig *string
 	var config *rest.Config
@@ -59,7 +55,7 @@ func main() {
 			panic(err.Error())
 		}
 		for _, job := range jobs.Items {
-			if pastJobs[job.Name] == false && job.Status.StartTime.Time.Add(time.Minute*10).After(time.Now()) {
+			if pastJobs[job.Name] == false && job.Status.StartTime.Time.Add(time.Minute*5).After(time.Now()) {
 				if job.Status.Succeeded > 0 {
 					timeSinceCompletion := time.Now().Sub(job.Status.CompletionTime.Time).Minutes()
 					err = slack.SendSlackMessage(message.JobSuccess(job.Name, timeSinceCompletion))
@@ -76,7 +72,7 @@ func main() {
 				}
 			}
 		}
-		time.Sleep(time.Minute * 5)
+		time.Sleep(time.Minute * 1)
 	}
 	os.Exit(0)
 }
