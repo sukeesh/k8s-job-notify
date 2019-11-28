@@ -2,3 +2,4 @@ vendor/
 .DS_Store
 *.swp
 _misc/
+k8s-job-notify
