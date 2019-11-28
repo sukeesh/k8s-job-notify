@@ -22,16 +22,19 @@ func SendSlackMessage(message string) error {
 	}
 	req, err := http.NewRequest(http.MethodPost, slackWebHookURL, bytes.NewBuffer(slackBody))
 	if err != nil {
-		panic(err.Error())
+		return err
 	}
 	req.Header.Add("Content-Type", "application/json")
 	client := &http.Client{Timeout: 10 * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
-		panic(err.Error())
+		return err
 	}
 	buf := new(bytes.Buffer)
-	buf.ReadFrom(resp.Body)
+	_, err = buf.ReadFrom(resp.Body)
+	if err != nil {
+		return err
+	}
 	if buf.String() != "ok" {
 		return errors.New("non ok response from Slack")
 	}
