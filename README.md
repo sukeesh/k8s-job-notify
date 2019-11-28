@@ -3,6 +3,7 @@
 [![GitHub followers](https://img.shields.io/github/followers/sukeesh?label=Follow&style=social)](https://github.com/sukeesh)
 [![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fsukeesh%2Fk8s-job-notify)](https://twitter.com/intent/tweet?url=https%3A%2F%2Fgithub.com%2Fsukeesh%2Fk8s-job-notify)
 
+[![DeepSource](https://static.deepsource.io/deepsource-badge-light.svg)](https://deepsource.io/gh/sukeesh/k8s-job-notify/?ref=repository-badge)
 
 [![GoReport](https://goreportcard.com/badge/github.com/sukeesh/k8s-job-notify)](https://goreportcard.com/report/github.com/sukeesh/k8s-job-notify)
 [![Docker Pulls](https://img.shields.io/docker/pulls/sukeesh/k8s-job-notify.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/sukeesh/k8s-job-notify/tags)
