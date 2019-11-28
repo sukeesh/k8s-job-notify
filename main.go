@@ -61,8 +61,8 @@ func main() {
 			os.Exit(1)
 		}
 		for _, job := range jobs.Items {
-			// job.Name can be unique, so using job.Name+CreationTimeStamp for checking uniqueness of the job
-			// so that duplicated messages to slack can be avoided
+			// job.Name can be same for different jobs, so using job.Name+CreationTimeStamp for checking
+			// uniqueness of the job. so that duplicated messages to slack can be avoided
 			jobUniqueHash := job.Name + job.CreationTimestamp.String()
 			if pastJobs[jobUniqueHash] == false && job.Status.StartTime.Time.Add(time.Minute*20).After(time.Now()) {
 				if job.Status.Succeeded > 0 {
