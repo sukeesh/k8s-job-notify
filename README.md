@@ -63,7 +63,7 @@ spec:
       labels:
         app: kjn
     spec:
-      restartPolicy: Never  
+      #serviceAccountName: k8s-job-notify (optional, see RBAC)
       containers:
       - env:
         - name: webhook
@@ -84,6 +84,48 @@ spec:
             cpu: 500m
             memory: 128Mi
 ```
+
+If your kubernetes uses RBAC, you should apply the following manifest as well:
+
+```
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: k8s-job-notify
+  namespace: <namespace_name>
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: <namespace_name>
+  name: job-reader
+rules:
+- apiGroups: ["batch"] # "" indicates the core API group
+  resources:
+  - jobs
+  verbs:
+  - get
+  - list
+  - watch
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: k8s-job-notify
+  namespace: <namespace_name>
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: job-reader
+subjects:
+- kind: ServiceAccount
+  name: k8s-job-notify
+  namespace: <namespace_name>
+```
+
 
 Contributing 🤝
 ---
