@@ -57,5 +57,4 @@ func main() {
 		time.Sleep(time.Minute * 1)
 		log.Printf("end of 1 minute wait.. fetching new jobs")
 	}
-	os.Exit(0)
 }
