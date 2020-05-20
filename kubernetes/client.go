@@ -46,7 +46,10 @@ func getConfig() (config *rest.Config, err error) {
 		path = usr.HomeDir + "/.kube/config"
 	}
 
-	config, err = clientcmd.BuildConfigFromFlags("", path)
+	kubeconfig := flag.String("kubeconfig", path, "absolute path to file")
+	flag.Parse()
+
+	config, err = clientcmd.BuildConfigFromFlags("", *kubeconfig)
 	if err != nil {
 		return nil, err
 	}
