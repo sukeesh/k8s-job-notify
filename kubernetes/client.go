@@ -59,5 +59,5 @@ func (c *Client) ListJobs(namespace string) (*batchv1.JobList, error) {
 	if err != nil {
 		return nil, err
 	}
-	return jobs, err
+	return jobs, nil
 }
