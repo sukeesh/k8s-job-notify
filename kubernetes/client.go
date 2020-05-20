@@ -35,24 +35,27 @@ func NewClient() (*Client, error) {
 }
 
 func getConfig() (config *rest.Config, err error) {
-	var path string
-
-	if !env.IsInCluster() {
+	if env.IsInCluster() {
+		config, err = rest.InClusterConfig()
+		if err != nil {
+			return nil, err
+		}
+		log.Printf("using inClusterConfig")
+	} else {
 		usr, err := user.Current()
 		if err != nil {
 			return nil, err
 		}
 
-		path = usr.HomeDir + "/.kube/config"
+		filePath := usr.HomeDir + "/.kube/config"
+		kubeconfig = flag.String("kubeconfig", filePath, "absolute path to file")
+		flag.Parse()
+		config, err = clientcmd.BuildConfigFromFlags("", *kubeconfig)
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	kubeconfig := flag.String("kubeconfig", path, "absolute path to file")
-	flag.Parse()
-
-	config, err = clientcmd.BuildConfigFromFlags("", *kubeconfig)
-	if err != nil {
-		return nil, err
-	}
 	return config, nil
 }
 
