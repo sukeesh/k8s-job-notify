@@ -36,7 +36,7 @@ Docker images are hosted at [hub.docker/k8s-job-notify](https://hub.docker.com/r
 
 Releases
 --
-- If you want to use stable releases, please use [github release tags](https://github.com/sukeesh/k8s-job-notify/releases). For example, `image: sukeesh/k8s-job-notify:1.0`
+- If you want to use stable releases, please use [github release tags](https://github.com/sukeesh/k8s-job-notify/releases). For example, `image: sukeesh/k8s-job-notify:1.2`
 - If you wish to use unstable, use `image: sukeesh/k8s-job-notify:beta` (triggered whenever push to `master` is made)
 
 To start using this
@@ -142,4 +142,3 @@ Please feel free to ⭐️ this repository if this project helped you! 😉
 ---
 Copyright © 2019 Sukeesh.<br>
 This project is MIT licensed.
-
