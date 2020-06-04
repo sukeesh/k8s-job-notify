@@ -1,6 +1,8 @@
 package kubernetes
 
 import (
+	"flag"
+	"log"
 	"os/user"
 
 	"github.com/sukeesh/k8s-job-notify/env"
@@ -48,7 +50,7 @@ func getConfig() (config *rest.Config, err error) {
 		}
 
 		filePath := usr.HomeDir + "/.kube/config"
-		kubeconfig = flag.String("kubeconfig", filePath, "absolute path to file")
+		kubeconfig := flag.String("kubeconfig", filePath, "absolute path to file")
 		flag.Parse()
 		config, err = clientcmd.BuildConfigFromFlags("", *kubeconfig)
 		if err != nil {
