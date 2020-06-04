@@ -69,3 +69,4 @@ func (c *Client) ListJobs(namespace string) (*batchv1.JobList, error) {
 	}
 	return jobs, nil
 }
+
