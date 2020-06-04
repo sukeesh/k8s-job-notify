@@ -67,13 +67,13 @@ func main() {
 			if pastJobs[jobUniqueHash] == false && job.Status.StartTime.Time.Add(time.Minute*20).After(time.Now()) {
 				if job.Status.Succeeded > 0 {
 					timeSinceCompletion := time.Now().Sub(job.Status.CompletionTime.Time).Minutes()
-					err = slack.SendSlackMessage(message.JobSuccess(job.Name, timeSinceCompletion))
+					err = slack.SendSlackMessage(message.JobSuccess(job.GetClusterName(), job.Name, timeSinceCompletion))
 					if err != nil {
 						log.Fatalf("sending a message to slack failed %v", zap.Error(err))
 					}
 					pastJobs[jobUniqueHash] = true
 				} else if job.Status.Failed > 0 {
-					err = slack.SendSlackMessage(message.JobFailure(job.Name))
+					err = slack.SendSlackMessage(message.JobFailure(job.GetClusterName(), job.Name))
 					if err != nil {
 						log.Fatalf("sending a message to slack failed %v", zap.Error(err))
 					}
