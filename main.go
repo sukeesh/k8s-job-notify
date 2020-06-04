@@ -40,7 +40,6 @@ func main() {
 			if pastJobs[jobUniqueHash] == false && job.Status.StartTime.Time.Add(time.Minute*20).After(time.Now()) {
 				if job.Status.Succeeded > 0 {
 					timeSinceCompletion := time.Now().Sub(job.Status.CompletionTime.Time).Minutes()
-
 					err = slack.SendSlackMessage(message.JobSuccess(job.Name, timeSinceCompletion))
 					if err != nil {
 						log.Fatalf("sending a message to slack failed %v", zap.Error(err))
