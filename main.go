@@ -7,8 +7,8 @@ import (
 
 	"go.uber.org/zap"
 
-	k8s "./kubernetes"
 	"github.com/sukeesh/k8s-job-notify/env"
+	k8s "github.com/sukeesh/k8s-job-notify/kubernetes"
 	"github.com/sukeesh/k8s-job-notify/message"
 	"github.com/sukeesh/k8s-job-notify/slack"
 
