@@ -4,10 +4,10 @@ import (
 	"fmt"
 )
 
-func JobSuccess(jobName string, timeSinceCompletion float64) string {
-	return "*" + jobName + "* succeeded " + fmt.Sprintf("%.1f", timeSinceCompletion) + " minutes ago :tada:"
+func JobSuccess(clusterName, jobName string, timeSinceCompletion float64) string {
+	return "*" + clusterName + ":" + jobName + "* succeeded " + fmt.Sprintf("%.1f", timeSinceCompletion) + " minutes ago :tada:"
 }
 
-func JobFailure(jobName string) string {
-	return "*" + jobName + "* failed :alert:"
+func JobFailure(clusterName, jobName string) string {
+	return "*" + clusterName + ":" + jobName + "* failed :alert:"
 }
