@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"time"
 
+	"github.com/jessevdk/go-flags"
 	"go.uber.org/zap"
 
 	"github.com/sukeesh/k8s-job-notify/env"
@@ -15,7 +17,17 @@ import (
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 )
 
+var opts struct {
+	ClusterName string `long:"cluster-name" description:"Show cluster name in message (optional)"`
+}
+
 func main() {
+	_, err := flags.ParseArgs(&opts, os.Args)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+
 	pastJobs := make(map[string]bool)
 
 	client, err := k8s.NewClient()
