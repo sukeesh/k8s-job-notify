@@ -128,6 +128,15 @@ subjects:
     namespace: <namespace_name>
 ```
 
+If you want to show cluster name in message:
+
+```yaml
+containers:
+  image: sukeesh/k8s-job-notify:<tag>
+  name: k8s-job-notify
+  args: ['--cluster-name=<your-cluster-name>']
+```
+
 ## Contributing 🤝
 
 Contributions, issues and feature requests are welcome.
