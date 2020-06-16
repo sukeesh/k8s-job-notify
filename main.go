@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"time"
 
+	"github.com/jessevdk/go-flags"
 	"go.uber.org/zap"
 
 	"github.com/sukeesh/k8s-job-notify/env"
@@ -15,7 +17,18 @@ import (
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 )
 
+var opts struct {
+	ClusterName string `long:"cluster-name" description:"Show cluster name in message (optional)"`
+}
+
 func main() {
+	_, err := flags.ParseArgs(&opts, os.Args)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+
+	clusterName := opts.ClusterName
 	pastJobs := make(map[string]bool)
 
 	client, err := k8s.NewClient()
@@ -40,13 +53,13 @@ func main() {
 			if pastJobs[jobUniqueHash] == false && job.Status.StartTime.Time.Add(time.Minute*20).After(time.Now()) {
 				if job.Status.Succeeded > 0 {
 					timeSinceCompletion := time.Now().Sub(job.Status.CompletionTime.Time).Minutes()
-					err = slack.SendSlackMessage(message.JobSuccess(job.Name, timeSinceCompletion))
+					err = slack.SendSlackMessage(message.JobSuccess(clusterName, job.Name, timeSinceCompletion))
 					if err != nil {
 						log.Fatalf("sending a message to slack failed %v", zap.Error(err))
 					}
 					pastJobs[jobUniqueHash] = true
 				} else if job.Status.Failed > 0 {
-					err = slack.SendSlackMessage(message.JobFailure(job.Name))
+					err = slack.SendSlackMessage(message.JobFailure(clusterName, job.Name))
 					if err != nil {
 						log.Fatalf("sending a message to slack failed %v", zap.Error(err))
 					}
