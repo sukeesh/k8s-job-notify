@@ -50,7 +50,7 @@ func main() {
 			// job.Name can be same for different jobs, so using job.Name+CreationTimeStamp for checking
 			// uniqueness of the job. so that duplicated messages to slack can be avoided
 			jobUniqueHash := job.Name + job.CreationTimestamp.String()
-			if pastJobs[jobUniqueHash] == false && job.Status.StartTime.Time.Add(time.Minute*20).After(time.Now()) {
+			if pastJobs[jobUniqueHash] == false && job.Status.CompletionTime.Time.Add(time.Minute*20).After(time.Now()) {
 				if job.Status.Succeeded > 0 {
 					timeSinceCompletion := time.Now().Sub(job.Status.CompletionTime.Time).Minutes()
 					err = slack.SendSlackMessage(message.JobSuccess(clusterName, job.Name, timeSinceCompletion))
