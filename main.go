@@ -43,7 +43,7 @@ func main() {
 		jobs, err := client.ListJobs(namespace)
 		if err != nil {
 			log.Fatalf("failed to list all jobs in the namespace %v", zap.Error(err))
-			os.Exit(1)
+			continue
 		}
 
 		for _, job := range jobs.Items {
@@ -51,14 +51,14 @@ func main() {
 			// uniqueness of the job. so that duplicated messages to slack can be avoided
 			jobUniqueHash := job.Name + job.CreationTimestamp.String()
 			if pastJobs[jobUniqueHash] == false {
-				if job.Status.Succeeded > 0 {
+				if job.Status.Succeeded > 0 && (job.Status.CompletionTime.Add(20*time.Minute).Unix() > time.Now().Unix()) {
 					timeSinceCompletion := time.Now().Sub(job.Status.CompletionTime.Time).Minutes()
 					err = slack.SendSlackMessage(message.JobSuccess(clusterName, job.Name, timeSinceCompletion))
 					if err != nil {
 						log.Fatalf("sending a message to slack failed %v", zap.Error(err))
 					}
 					pastJobs[jobUniqueHash] = true
-				} else if job.Status.Failed > 0 {
+				} else if job.Status.Failed > 0 && (job.Status.CompletionTime.Add(20*time.Minute).Unix() > time.Now().Unix()) {
 					err = slack.SendSlackMessage(message.JobFailure(clusterName, job.Name))
 					if err != nil {
 						log.Fatalf("sending a message to slack failed %v", zap.Error(err))
