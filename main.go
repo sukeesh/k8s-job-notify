@@ -58,12 +58,14 @@ func main() {
 						log.Fatalf("sending a message to slack failed %v", zap.Error(err))
 					}
 					pastJobs[jobUniqueHash] = true
-				} else if job.Status.Failed > 0 && (job.Status.CompletionTime.Add(20*time.Minute).Unix() > time.Now().Unix()) {
-					err = slack.SendSlackMessage(message.JobFailure(clusterName, job.Name))
-					if err != nil {
-						log.Fatalf("sending a message to slack failed %v", zap.Error(err))
+				} else if job.Status.Failed > 0 {
+					if job.Status.StartTime.Add(5*time.Hour).Unix() > time.Now().Unix() {
+						err = slack.SendSlackMessage(message.JobFailure(clusterName, job.Name))
+						if err != nil {
+							log.Fatalf("sending a message to slack failed %v", zap.Error(err))
+						}
+						pastJobs[jobUniqueHash] = true
 					}
-					pastJobs[jobUniqueHash] = true
 				}
 			}
 		}
