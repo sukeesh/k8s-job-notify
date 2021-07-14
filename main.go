@@ -39,7 +39,7 @@ func main() {
 
 	namespace := env.GetNamespace()
 	log.Printf("fetching jobs from %s namespace", namespace)
-	level := env.GetNotificationLeve()
+	level := env.GetNotificationLevel()
 	log.Printf("notification_level set at '%s'", level)
 	for {
 		jobs, err := client.ListJobs(namespace)
