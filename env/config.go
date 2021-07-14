@@ -19,6 +19,14 @@ func GetSlackWebHookURL() (webhook string, err error) {
 	return webhook, nil
 }
 
+func GetNotificationLevel() (level string) {
+	if level = os.Getenv("notification_level"); level == "" {
+		level = "all"
+	}
+	return level
+}
+
+
 func IsInCluster() bool {
 	inCluster := os.Getenv("incluster")
 	return inCluster == "1"
