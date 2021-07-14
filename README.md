@@ -30,6 +30,12 @@ This expects kube config to be in `~/.kube/config` (default)
 $ export webhook="slack_webhook_url" && export namespace="<namespace_name>" && go build &&  ./k8s-job-notify
 ```
 
+You can also adjust the notification level to `failed` instead of `all` so that it only sends failed notificatinos.
+
+```sh
+$ export webhook="slack_webhook_url" && export namespace="<namespace_name>" && export notification_level="failed" && go build &&  ./k8s-job-notify
+```
+
 Docker 🐳
 
 ---
@@ -76,6 +82,8 @@ spec:
                   fieldPath: metadata.namespace
             - name: incluster
               value: '1'
+            - name: "notification_level"
+              value: 'all'  # or 'failed'
           image: sukeesh/k8s-job-notify:<tag>
           name: k8s-job-notify
           resources:
