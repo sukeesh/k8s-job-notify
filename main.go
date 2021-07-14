@@ -53,7 +53,7 @@ func main() {
 			// uniqueness of the job. so that duplicated messages to slack can be avoided
 			jobUniqueHash := job.Name + job.CreationTimestamp.String()
 			if pastJobs[jobUniqueHash] == false {
-				if level == 'all' {
+				if level == "all" {
 					// Send success notifications.
 					if job.Status.Succeeded > 0 &&  (job.Status.CompletionTime.Add(20*time.Minute).Unix() > time.Now().Unix()) {
 						timeSinceCompletion := time.Now().Sub(job.Status.CompletionTime.Time).Minutes()
@@ -65,7 +65,7 @@ func main() {
 					}
 				}
 
-				if level == 'failed' || level == 'all' {
+				if level == "failed" || level == "all" {
 					// Send failed notifications.
 				  if job.Status.Failed > 0 {
 						if job.Status.StartTime.Add(5*time.Hour).Unix() > time.Now().Unix() {
