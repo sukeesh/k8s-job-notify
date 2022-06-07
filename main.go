@@ -39,6 +39,8 @@ func main() {
 
 	namespace := env.GetNamespace()
 	log.Printf("fetching jobs from %s namespace", namespace)
+	level := env.GetNotificationLevel()
+	log.Printf("notification_level set at '%s'", level)
 	for {
 		jobs, err := client.ListJobs(namespace)
 		if err != nil {
@@ -51,20 +53,28 @@ func main() {
 			// uniqueness of the job. so that duplicated messages to slack can be avoided
 			jobUniqueHash := job.Name + job.CreationTimestamp.String()
 			if pastJobs[jobUniqueHash] == false {
-				if job.Status.Succeeded > 0 && (job.Status.CompletionTime.Add(20*time.Minute).Unix() > time.Now().Unix()) {
-					timeSinceCompletion := time.Now().Sub(job.Status.CompletionTime.Time).Minutes()
-					err = slack.SendSlackMessage(message.JobSuccess(clusterName, job.Name, timeSinceCompletion))
-					if err != nil {
-						log.Fatalf("sending a message to slack failed %v", zap.Error(err))
-					}
-					pastJobs[jobUniqueHash] = true
-				} else if job.Status.Failed > 0 {
-					if job.Status.StartTime.Add(5*time.Hour).Unix() > time.Now().Unix() {
-						err = slack.SendSlackMessage(message.JobFailure(clusterName, job.Name))
+				if level == "all" {
+					// Send success notifications.
+					if job.Status.Succeeded > 0 &&  (job.Status.CompletionTime.Add(20*time.Minute).Unix() > time.Now().Unix()) {
+						timeSinceCompletion := time.Now().Sub(job.Status.CompletionTime.Time).Minutes()
+						err = slack.SendSlackMessage(message.JobSuccess(clusterName, job.Name, timeSinceCompletion))
 						if err != nil {
 							log.Fatalf("sending a message to slack failed %v", zap.Error(err))
 						}
 						pastJobs[jobUniqueHash] = true
+					}
+				}
+
+				if level == "failed" || level == "all" {
+					// Send failed notifications.
+				  if job.Status.Failed > 0 {
+						if job.Status.StartTime.Add(5*time.Hour).Unix() > time.Now().Unix() {
+							err = slack.SendSlackMessage(message.JobFailure(clusterName, job.Name))
+							if err != nil {
+								log.Fatalf("sending a message to slack failed %v", zap.Error(err))
+							}
+							pastJobs[jobUniqueHash] = true
+						}
 					}
 				}
 			}
